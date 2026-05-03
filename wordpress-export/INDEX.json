@@ -1,0 +1,97 @@
+{
+  "pages": [
+    {
+      "slug": "politique-de-confidentialite",
+      "title": "Politique de confidentialité",
+      "link": "https://padelsocialclub.be/politique-de-confidentialite/"
+    },
+    {
+      "slug": "cookies",
+      "title": "Cookies",
+      "link": "https://padelsocialclub.be/cookies/"
+    },
+    {
+      "slug": "event",
+      "title": "Agenda",
+      "link": "https://padelsocialclub.be/event/"
+    },
+    {
+      "slug": "tickets-order",
+      "title": "Commande terminée",
+      "link": "https://padelsocialclub.be/tickets-order/"
+    },
+    {
+      "slug": "tickets-checkout",
+      "title": "Commande de billets",
+      "link": "https://padelsocialclub.be/tickets-checkout/"
+    },
+    {
+      "slug": "creez-votre-event",
+      "title": "Créez votre Event",
+      "link": "https://padelsocialclub.be/creez-votre-event/"
+    },
+    {
+      "slug": "accueil",
+      "title": "Accueil",
+      "link": "https://padelsocialclub.be/"
+    }
+  ],
+  "events": [
+    {
+      "slug": "psc-episode-1",
+      "title": "PSC épisode 1",
+      "start_date": "2025-05-24 13:30:00",
+      "venue": "Tero Limelette",
+      "cost": ""
+    },
+    {
+      "slug": "psc-episode-2",
+      "title": "PSC épisode 2",
+      "start_date": "2025-06-07 13:30:00",
+      "venue": "Tero Limelette",
+      "cost": ""
+    },
+    {
+      "slug": "psc-episode-3",
+      "title": "PSC épisode 3",
+      "start_date": "2025-07-05 13:30:00",
+      "venue": "Tero Limelette",
+      "cost": ""
+    },
+    {
+      "slug": "psc-4",
+      "title": "PSC 4",
+      "start_date": "2025-08-02 13:30:00",
+      "venue": "Tero Limelette",
+      "cost": "35€"
+    },
+    {
+      "slug": "padel-social-club-5",
+      "title": "Padel Social Club #5",
+      "start_date": "2025-09-17 18:30:00",
+      "venue": "Tero Limelette",
+      "cost": "39€"
+    },
+    {
+      "slug": "le-padel-social-club-7",
+      "title": " Le Padel Social Club #7 !",
+      "start_date": "2026-01-21 18:30:00",
+      "venue": "",
+      "cost": "39€"
+    },
+    {
+      "slug": "padel-social-club-edition-8",
+      "title": "Padel Social Club édition #8",
+      "start_date": "2026-03-11 18:30:00",
+      "venue": "",
+      "cost": "39€"
+    },
+    {
+      "slug": "le-padel-social-club-9",
+      "title": "Le Padel Social Club #9",
+      "start_date": "2026-04-24 18:30:00",
+      "venue": "",
+      "cost": "40€"
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Brand palette (extracted from the WordPress site) */
+    --brick: 11 64% 40%;       /* #A63C24 — primary brick red */
+    --gold: 40 68% 53%;        /* #D9A334 — secondary gold     */
+    --cream: 41 76% 94%;       /* #FBF3E2 — cream background   */
+
+    /* shadcn semantic tokens, mapped to brand palette */
+    --background: var(--cream);
+    --foreground: 0 0% 18%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 18%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 18%;
+
+    --primary: var(--brick);
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: var(--gold);
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 41 30% 90%;
+    --muted-foreground: 0 0% 35%;
+
+    --accent: var(--gold);
+    --accent-foreground: 0 0% 18%;
+
+    --border: 41 30% 85%;
+    --input: 41 30% 85%;
+    --ring: var(--brick);
+
+    --radius: 0.75rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading uppercase tracking-tight;
+  }
+}
