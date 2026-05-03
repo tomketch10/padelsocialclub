@@ -10,6 +10,15 @@ export interface PadelEvent {
 
 export const events: PadelEvent[] = [
   {
+    slug: "le-padel-social-club-10",
+    title: "Le Padel Social Club #10",
+    startDate: "2026-05-22T18:30:00",
+    endDate: "2026-05-22T21:30:00",
+    cost: "40€",
+    venue: "Gastuche",
+    registrationUrl: "https://padelsocialclub.be/",
+  },
+  {
     slug: "le-padel-social-club-9",
     title: "Le Padel Social Club #9",
     startDate: "2026-04-24T18:30:00",

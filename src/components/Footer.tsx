@@ -1,50 +1,60 @@
 import { Link } from "react-router-dom";
-import { Instagram, Mail } from "lucide-react";
+import { Instagram } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="bg-foreground text-background mt-24">
-      <div className="container py-14 grid gap-10 md:grid-cols-3">
-        <div>
-          <h3 className="font-heading text-xl uppercase mb-3">Padel Social Club</h3>
-          <p className="text-sm text-background/70 max-w-xs">
-            Le padel version social, fun et fair-play. Tournois à Gastuche au format Paradis / Enfer.
-          </p>
-        </div>
+    <footer className="bg-background">
+      <div className="container py-16 grid gap-12 md:grid-cols-4 items-start">
+        <Link to="/" aria-label="Padel Social Club — accueil">
+          <img src="/logo.png" alt="Padel Social Club" className="h-28 w-28 object-contain" />
+        </Link>
 
         <div>
-          <h3 className="font-heading text-xl uppercase mb-3">Get in touch</h3>
-          <a
-            href="mailto:michael@i-management.be"
-            className="inline-flex items-center gap-2 text-sm hover:text-secondary transition-colors"
-          >
-            <Mail className="h-4 w-4" /> michael@i-management.be
-          </a>
-        </div>
-
-        <div>
-          <h3 className="font-heading text-xl uppercase mb-3">Réseaux sociaux</h3>
+          <h3 className="font-heading text-lg uppercase mb-4 tracking-wide">Réseaux sociaux</h3>
           <a
             href="https://www.instagram.com/padelsocial_club"
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-2 text-sm hover:text-secondary transition-colors"
+            className="inline-flex items-center gap-3 text-sm hover:text-primary transition-colors"
           >
-            <Instagram className="h-4 w-4" /> @padelsocial_club
+            <Instagram className="h-5 w-5 text-primary" /> padelsocial_club
           </a>
+        </div>
+
+        <div>
+          <h3 className="font-heading text-lg uppercase mb-4 tracking-wide">Get in touch</h3>
+          <a
+            href="mailto:michael@i-management.be"
+            className="text-sm hover:text-primary transition-colors"
+          >
+            michael@i-management.be
+          </a>
+        </div>
+
+        <div>
+          <h3 className="font-heading text-lg uppercase mb-4 tracking-wide">Mentions légales</h3>
+          <ul className="space-y-2 text-sm">
+            <li>
+              <Link to="/cookies" className="text-secondary hover:text-primary transition-colors">
+                Cookie
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/politique-de-confidentialite"
+                className="text-secondary hover:text-primary transition-colors"
+              >
+                Politique de confidentialité
+              </Link>
+            </li>
+          </ul>
         </div>
       </div>
 
-      <div className="border-t border-background/10">
-        <div className="container py-5 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-background/60">
-          <p>© {new Date().getFullYear()} Padel Social Club. All Rights Reserved.</p>
-          <nav className="flex gap-6">
-            <Link to="/cookies" className="hover:text-background">Cookies</Link>
-            <Link to="/politique-de-confidentialite" className="hover:text-background">
-              Politique de confidentialité
-            </Link>
-          </nav>
-        </div>
+      <div className="bg-primary text-primary-foreground">
+        <p className="container py-4 text-center text-sm">
+          © {new Date().getFullYear()} All Rights Reserved.
+        </p>
       </div>
     </footer>
   );
