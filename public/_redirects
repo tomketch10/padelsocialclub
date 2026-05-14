@@ -1,1 +1,18 @@
+# 301-redirects for legacy WordPress URLs.
+# Order matters: specific rules first, SPA fallback last.
+
+# The old WP "Agenda" page (post type archive)
+/event           /agenda  301
+/events          /agenda  301
+
+# Individual WP event pages -> the new Agenda
+/event/*         /agenda  301
+/events/*        /agenda  301
+
+# WP feed / sitemap / wp-admin scrapers
+/feed            /  301
+/wp-login.php    /  301
+/wp-admin/*      /  301
+
+# SPA fallback (must be last)
 /*    /index.html   200

@@ -1,7 +1,7 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { getNextEvent } from "@/data/events";
+import { getNextEvent, registrationMailto } from "@/data/events";
 import { ArrowDown, MapPin, CalendarDays, Clock, Tag, Trophy } from "lucide-react";
 
 const dateFormatter = new Intl.DateTimeFormat("fr-BE", {
@@ -40,7 +40,7 @@ export default function Home() {
 
           <div className="relative">
             <img
-              src="/illustrations/players-hero.png"
+              src="/illustrations/players-hero.webp"
               alt="Joueurs de padel"
               className="w-full max-h-[36rem] object-contain object-bottom"
             />
@@ -56,8 +56,12 @@ export default function Home() {
               <span aria-hidden>🎾</span> {next.title} !
             </h2>
             <p>
-              Nous avons le plaisir de vous inviter à la <strong>9{sup("e")} édition du PSC</strong>,
-              qui aura lieu le{" "}
+              Nous avons le plaisir de vous inviter à la{" "}
+              <strong>
+                {editionNumber(next.title)}
+                {sup("e")} édition du PSC
+              </strong>
+              , qui aura lieu le{" "}
               <strong>{dateFormatter.format(new Date(next.startDate)).toUpperCase()}</strong>, de{" "}
               <strong>
                 {timeFormatter.format(new Date(next.startDate))} à{" "}
@@ -84,9 +88,7 @@ export default function Home() {
             </p>
             <div className="pt-4">
               <Button size="lg" className="rounded-full px-10" asChild>
-                <a href={next.registrationUrl} target="_blank" rel="noreferrer">
-                  S'inscrire au tournoi
-                </a>
+                <a href={registrationMailto(next)}>S'inscrire au tournoi</a>
               </Button>
             </div>
           </div>
@@ -166,4 +168,9 @@ function InfoCard({
 
 function sup(text: string) {
   return <sup>{text}</sup>;
+}
+
+function editionNumber(title: string): string {
+  const match = title.match(/#(\d+)/);
+  return match ? match[1] : "";
 }

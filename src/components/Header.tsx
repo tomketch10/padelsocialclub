@@ -17,6 +17,9 @@ export function Header() {
           <NavLink to="/" end className={navLinkClass}>
             Accueil
           </NavLink>
+          <NavLink to="/agenda" className={navLinkClass}>
+            Agenda
+          </NavLink>
           <NavLink to="/creez-votre-event" className={navLinkClass}>
             Créez votre Event
           </NavLink>
@@ -34,7 +37,7 @@ export function Header() {
         {/* Right: CTA */}
         <div className="justify-self-end">
           <Button size="lg" className="rounded-full px-8" asChild>
-            <a href="#prochain-tournoi">S'inscrire</a>
+            <a href="/#prochain-tournoi">S'inscrire</a>
           </Button>
         </div>
       </div>
