@@ -1,20 +1,36 @@
+/**
+ * A tournament edition. `startDate`/`endDate` are omitted when the next edition
+ * has been announced but not yet scheduled — the homepage renders this as
+ * "date à confirmer".
+ */
 export interface PadelEvent {
   slug: string;
   title: string;
-  startDate: string;
-  endDate: string;
+  startDate?: string;
+  endDate?: string;
   cost: string;
   venue: string;
 }
 
+type ScheduledPadelEvent = PadelEvent & Required<Pick<PadelEvent, "startDate" | "endDate">>;
+
 const REGISTRATION_EMAIL = "michael@i-management.be";
 
+function isScheduled(event: PadelEvent): event is ScheduledPadelEvent {
+  return !!event.startDate;
+}
+
 export function registrationMailto(event: PadelEvent): string {
-  const subject = `Inscription — ${event.title}`;
+  const subject = isScheduled(event)
+    ? `Inscription — ${event.title}`
+    : `Tenez-moi informé(e) du prochain tournoi`;
+  const datePart = isScheduled(event) ? ` (${event.startDate.slice(0, 10)})` : "";
   const body = [
     `Bonjour Michael,`,
     ``,
-    `Je souhaite m'inscrire à ${event.title} (${event.startDate.slice(0, 10)}).`,
+    isScheduled(event)
+      ? `Je souhaite m'inscrire à ${event.title}${datePart}.`
+      : `Je souhaite être tenu(e) informé(e) du prochain tournoi (${event.title}).`,
     ``,
     `Nom :`,
     `Niveau (nombre de matchs joués) :`,
@@ -29,8 +45,6 @@ export const events: PadelEvent[] = [
   {
     slug: "le-padel-social-club-10",
     title: "Le Padel Social Club #10",
-    startDate: "2026-05-22T18:30:00",
-    endDate: "2026-05-22T21:30:00",
     cost: "40€",
     venue: "Gastuche",
   },
@@ -100,17 +114,24 @@ export const events: PadelEvent[] = [
   },
 ];
 
+/**
+ * Returns the soonest upcoming event. Prefers events with confirmed dates;
+ * falls back to a TBC (no date) event if no scheduled future events exist.
+ */
 export function getNextEvent(now: Date = new Date()): PadelEvent | null {
   const upcoming = events
+    .filter(isScheduled)
     .filter((e) => new Date(e.startDate) >= now)
     .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
-  return upcoming[0] ?? null;
+  if (upcoming.length > 0) return upcoming[0];
+  return events.find((e) => !isScheduled(e)) ?? null;
 }
 
 export function getPastEvents(now: Date = new Date()): PadelEvent[] {
   return events
+    .filter(isScheduled)
     .filter((e) => new Date(e.startDate) < now)
     .sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime());
 }
 
-export { REGISTRATION_EMAIL };
+export { REGISTRATION_EMAIL, isScheduled };

@@ -4,6 +4,7 @@ import {
   events,
   getNextEvent,
   getPastEvents,
+  isScheduled,
   registrationMailto,
   type PadelEvent,
 } from "@/data/events";
@@ -23,9 +24,18 @@ const timeFormatter = new Intl.DateTimeFormat("fr-BE", {
 
 export default function Agenda() {
   const next = getNextEvent();
+  const now = new Date();
   const upcoming = events
-    .filter((e) => new Date(e.startDate) >= new Date())
-    .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
+    .filter((e) => !isScheduled(e) || new Date(e.startDate) >= now)
+    .sort((a, b) => {
+      // Scheduled events come first (sorted ascending), then TBC events at the end.
+      if (isScheduled(a) && isScheduled(b)) {
+        return new Date(a.startDate).getTime() - new Date(b.startDate).getTime();
+      }
+      if (isScheduled(a)) return -1;
+      if (isScheduled(b)) return 1;
+      return 0;
+    });
   const past = getPastEvents();
 
   return (
@@ -69,6 +79,7 @@ export default function Agenda() {
 }
 
 function UpcomingRow({ event }: { event: PadelEvent }) {
+  const scheduled = isScheduled(event);
   return (
     <li className="bg-card border border-border/60 rounded-xl p-6 shadow-sm flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
       <div className="flex-1 space-y-2">
@@ -76,9 +87,9 @@ function UpcomingRow({ event }: { event: PadelEvent }) {
         <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-foreground/80">
           <span className="inline-flex items-center gap-2">
             <CalendarDays className="h-4 w-4 text-secondary" />
-            {longDateFormatter.format(new Date(event.startDate))}
-            {" — "}
-            {timeFormatter.format(new Date(event.startDate))}
+            {scheduled
+              ? `${longDateFormatter.format(new Date(event.startDate))} — ${timeFormatter.format(new Date(event.startDate))}`
+              : "Date à confirmer"}
           </span>
           <span className="inline-flex items-center gap-2">
             <MapPin className="h-4 w-4 text-secondary" />
@@ -91,13 +102,15 @@ function UpcomingRow({ event }: { event: PadelEvent }) {
         </div>
       </div>
       <Button className="rounded-full px-8" asChild>
-        <a href={registrationMailto(event)}>S'inscrire</a>
+        <a href={registrationMailto(event)}>
+          {scheduled ? "S'inscrire" : "Soyez tenu(e) informé(e)"}
+        </a>
       </Button>
     </li>
   );
 }
 
-function PastRow({ event }: { event: PadelEvent }) {
+function PastRow({ event }: { event: PadelEvent & { startDate: string } }) {
   return (
     <li className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 border-b border-border/60 pb-3">
       <span className="font-heading uppercase text-foreground/80">{event.title}</span>

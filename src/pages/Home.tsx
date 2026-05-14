@@ -1,7 +1,7 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { getNextEvent, registrationMailto } from "@/data/events";
+import { getNextEvent, isScheduled, registrationMailto, type PadelEvent } from "@/data/events";
 import { ArrowDown, MapPin, CalendarDays, Clock, Tag, Trophy } from "lucide-react";
 
 const dateFormatter = new Intl.DateTimeFormat("fr-BE", {
@@ -17,6 +17,9 @@ const timeFormatter = new Intl.DateTimeFormat("fr-BE", {
 
 export default function Home() {
   const next = getNextEvent();
+  const nextDateLabel = next && isScheduled(next)
+    ? dateFormatter.format(new Date(next.startDate)).toUpperCase()
+    : "À CONFIRMER";
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -55,20 +58,7 @@ export default function Home() {
             <h2 className="flex items-center gap-3 font-heading text-3xl md:text-4xl text-foreground">
               <span aria-hidden>🎾</span> {next.title} !
             </h2>
-            <p>
-              Nous avons le plaisir de vous inviter à la{" "}
-              <strong>
-                {editionNumber(next.title)}
-                {sup("e")} édition du PSC
-              </strong>
-              , qui aura lieu le{" "}
-              <strong>{dateFormatter.format(new Date(next.startDate)).toUpperCase()}</strong>, de{" "}
-              <strong>
-                {timeFormatter.format(new Date(next.startDate))} à{" "}
-                {timeFormatter.format(new Date(next.endDate))}
-              </strong>{" "}
-              au Gastuche (Chau. de Wavre, 504, 1390 Grez-Doiceau) sur 7 terrains.
-            </p>
+            <NextEventInvite event={next} />
             <p>
               Au programme : notre désormais célèbre format <strong>Paradis / Enfer</strong>, en
               individuel, dans une ambiance{" "}
@@ -88,7 +78,9 @@ export default function Home() {
             </p>
             <div className="pt-4">
               <Button size="lg" className="rounded-full px-10" asChild>
-                <a href={registrationMailto(next)}>S'inscrire au tournoi</a>
+                <a href={registrationMailto(next)}>
+                  {isScheduled(next) ? "S'inscrire au tournoi" : "Soyez tenu(e) informé(e)"}
+                </a>
               </Button>
             </div>
           </div>
@@ -127,8 +119,8 @@ export default function Home() {
               Gastuche
             </InfoCard>
             <InfoCard icon={<CalendarDays className="h-12 w-12 text-secondary" strokeWidth={1.5} />} title="Dates">
-              Prochaines dates :<br />
-              {next ? dateFormatter.format(new Date(next.startDate)).toUpperCase() : "—"}
+              Prochaine date :<br />
+              {nextDateLabel}
             </InfoCard>
             <InfoCard icon={<Clock className="h-12 w-12 text-secondary" strokeWidth={1.5} />} title="Heure">
               18h30 à 21h30
@@ -148,6 +140,38 @@ export default function Home() {
   );
 }
 
+function NextEventInvite({ event }: { event: PadelEvent }) {
+  const edition = editionNumber(event.title);
+  const editionLabel = (
+    <strong>
+      {edition}
+      <sup>e</sup> édition du PSC
+    </strong>
+  );
+
+  if (isScheduled(event)) {
+    return (
+      <p>
+        Nous avons le plaisir de vous inviter à la {editionLabel}, qui aura lieu le{" "}
+        <strong>{dateFormatter.format(new Date(event.startDate)).toUpperCase()}</strong>, de{" "}
+        <strong>
+          {timeFormatter.format(new Date(event.startDate))} à{" "}
+          {timeFormatter.format(new Date(event.endDate))}
+        </strong>{" "}
+        au Gastuche (Chau. de Wavre, 504, 1390 Grez-Doiceau) sur 7 terrains.
+      </p>
+    );
+  }
+
+  return (
+    <p>
+      Nous préparons la {editionLabel} —{" "}
+      <strong>la date sera bientôt confirmée</strong>. Comme d'habitude, rendez-vous au Gastuche
+      (Chau. de Wavre, 504, 1390 Grez-Doiceau) sur 7 terrains, en soirée.
+    </p>
+  );
+}
+
 function InfoCard({
   icon,
   title,
@@ -164,10 +188,6 @@ function InfoCard({
       <p className="text-sm text-primary-foreground/85 max-w-[18ch]">{children}</p>
     </div>
   );
-}
-
-function sup(text: string) {
-  return <sup>{text}</sup>;
 }
 
 function editionNumber(title: string): string {
