@@ -1,7 +1,6 @@
 name = "padelsocialclub"
 compatibility_date = "2026-05-01"
 pages_build_output_dir = "dist"
-account_id = "a16ca00b38bc77d4163d3b362f5c8a50"
 
 [[d1_databases]]
 binding = "DB"
