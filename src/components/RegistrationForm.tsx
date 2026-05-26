@@ -1,9 +1,16 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import type { PadelEvent } from "@/data/events";
-import { CheckCircle2, Hourglass } from "lucide-react";
+import { CheckCircle2, Hourglass, Info } from "lucide-react";
 
-type Status = "idle" | "submitting" | "confirmed" | "waitlist" | "error";
+type SubmitStatus = "idle" | "submitting" | "confirmed" | "waitlist" | "error";
+
+interface EventStatus {
+  capacity: number | null;
+  confirmed: number;
+  full: boolean;
+  accepting: boolean;
+}
 
 interface RegistrationFormProps {
   event: PadelEvent;
@@ -16,13 +23,31 @@ interface RegisterResponse {
 }
 
 export function RegistrationForm({ event }: RegistrationFormProps) {
-  const [status, setStatus] = useState<Status>("idle");
+  const [eventStatus, setEventStatus] = useState<EventStatus | null>(null);
+  const [submitStatus, setSubmitStatus] = useState<SubmitStatus>("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [waitlistPosition, setWaitlistPosition] = useState<number | null>(null);
 
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const response = await fetch(`/api/event-status?slug=${encodeURIComponent(event.slug)}`);
+        if (!response.ok) return;
+        const data = (await response.json()) as EventStatus;
+        if (!cancelled) setEventStatus(data);
+      } catch {
+        // Non-fatal: form still works, just without the upfront full/open banner.
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [event.slug]);
+
   async function handleSubmit(formEvent: FormEvent<HTMLFormElement>) {
     formEvent.preventDefault();
-    setStatus("submitting");
+    setSubmitStatus("submitting");
     setErrorMessage(null);
 
     const formData = new FormData(formEvent.currentTarget);
@@ -42,21 +67,21 @@ export function RegistrationForm({ event }: RegistrationFormProps) {
       });
       const data = (await response.json()) as RegisterResponse;
       if (!response.ok || !data.status) {
-        setStatus("error");
+        setSubmitStatus("error");
         setErrorMessage(data.error ?? "Une erreur est survenue. Réessaie dans un instant.");
         return;
       }
-      setStatus(data.status);
+      setSubmitStatus(data.status);
       setWaitlistPosition(data.position ?? null);
     } catch {
-      setStatus("error");
+      setSubmitStatus("error");
       setErrorMessage(
         "Impossible de joindre le serveur. Vérifie ta connexion et réessaie.",
       );
     }
   }
 
-  if (status === "confirmed") {
+  if (submitStatus === "confirmed") {
     return (
       <SuccessPanel
         icon={<CheckCircle2 className="h-10 w-10 text-emerald-600" strokeWidth={1.5} />}
@@ -68,7 +93,7 @@ export function RegistrationForm({ event }: RegistrationFormProps) {
     );
   }
 
-  if (status === "waitlist") {
+  if (submitStatus === "waitlist") {
     return (
       <SuccessPanel
         icon={<Hourglass className="h-10 w-10 text-secondary" strokeWidth={1.5} />}
@@ -81,10 +106,14 @@ export function RegistrationForm({ event }: RegistrationFormProps) {
     );
   }
 
-  const submitting = status === "submitting";
+  const submitting = submitStatus === "submitting";
+  const isFull = eventStatus?.full === true;
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      {eventStatus && (
+        <CapacityBanner status={eventStatus} />
+      )}
       <Field label="Nom et prénom" name="name" type="text" autoComplete="name" required />
       <Field label="Email" name="email" type="email" autoComplete="email" required />
       <Field label="Téléphone" name="phone" type="tel" autoComplete="tel" required />
@@ -106,10 +135,38 @@ export function RegistrationForm({ event }: RegistrationFormProps) {
         </p>
       )}
       <Button type="submit" size="lg" className="rounded-full px-10" disabled={submitting}>
-        {submitting ? "Envoi…" : "Réserver ma place"}
+        {submitting ? "Envoi…" : isFull ? "Rejoindre la liste d'attente" : "Réserver ma place"}
       </Button>
     </form>
   );
+}
+
+function CapacityBanner({ status }: { status: EventStatus }) {
+  if (!status.accepting || status.capacity === null) return null;
+  if (status.full) {
+    return (
+      <div className="flex gap-3 rounded-md border border-secondary/50 bg-secondary/10 px-4 py-3 text-sm">
+        <Hourglass className="h-5 w-5 shrink-0 text-secondary mt-0.5" strokeWidth={1.75} />
+        <p>
+          <strong>Le tournoi est complet</strong> ({status.confirmed}/{status.capacity}). Tu peux
+          encore t'inscrire <strong>sur la liste d'attente</strong> — on te prévient dès qu'une
+          place se libère.
+        </p>
+      </div>
+    );
+  }
+  const remaining = status.capacity - status.confirmed;
+  if (remaining <= 5) {
+    return (
+      <div className="flex gap-3 rounded-md border border-secondary/50 bg-secondary/10 px-4 py-3 text-sm">
+        <Info className="h-5 w-5 shrink-0 text-secondary mt-0.5" strokeWidth={1.75} />
+        <p>
+          Plus que <strong>{remaining} place{remaining === 1 ? "" : "s"}</strong> sur {status.capacity}.
+        </p>
+      </div>
+    );
+  }
+  return null;
 }
 
 function Field({

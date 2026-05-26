@@ -50,7 +50,7 @@ export const events: PadelEvent[] = [
     startDate: "2026-07-04T18:30:00",
     endDate: "2026-07-04T21:30:00",
     cost: "40€",
-    venue: "Moko Gastuche",
+    venue: "Mokko Gastuche",
     capacity: 28,
   },
   {
