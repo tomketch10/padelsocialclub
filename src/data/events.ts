@@ -10,6 +10,8 @@ export interface PadelEvent {
   endDate?: string;
   cost: string;
   venue: string;
+  /** Total number of player spots. Required for events that take registrations. */
+  capacity?: number;
 }
 
 type ScheduledPadelEvent = PadelEvent & Required<Pick<PadelEvent, "startDate" | "endDate">>;
@@ -45,8 +47,11 @@ export const events: PadelEvent[] = [
   {
     slug: "le-padel-social-club-10",
     title: "Le Padel Social Club #10",
+    startDate: "2026-07-04T18:30:00",
+    endDate: "2026-07-04T21:30:00",
     cost: "40€",
-    venue: "Gastuche",
+    venue: "Moko Gastuche",
+    capacity: 28,
   },
   {
     slug: "le-padel-social-club-9",

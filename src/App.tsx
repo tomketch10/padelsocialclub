@@ -4,6 +4,7 @@ import Agenda from "./pages/Agenda";
 import CreezVotreEvent from "./pages/CreezVotreEvent";
 import Cookies from "./pages/Cookies";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 
 export default function App() {
@@ -15,6 +16,7 @@ export default function App() {
         <Route path="/creez-votre-event" element={<CreezVotreEvent />} />
         <Route path="/cookies" element={<Cookies />} />
         <Route path="/politique-de-confidentialite" element={<PrivacyPolicy />} />
+        <Route path="/admin" element={<Admin />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

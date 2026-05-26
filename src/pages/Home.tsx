@@ -1,6 +1,7 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
+import { RegistrationForm } from "@/components/RegistrationForm";
 import { getNextEvent, isScheduled, registrationMailto, type PadelEvent } from "@/data/events";
 import { ArrowDown, MapPin, CalendarDays, Clock, Tag, Trophy } from "lucide-react";
 
@@ -65,8 +66,8 @@ export default function Home() {
               <strong>chaleureuse, fair-play et pleine d'énergie</strong>.
             </p>
             <p>
-              Places limitées à <strong>30 participants</strong> — premiers inscrits, premiers
-              servis !
+              Places limitées à <strong>{next.capacity ?? 30} participants</strong> — premiers
+              inscrits, premiers servis !
             </p>
             <p>
               Compris dans le prix de <strong>{next.cost}</strong> : 3h de padel (24€), des balles
@@ -76,13 +77,17 @@ export default function Home() {
               <strong>Niveau requis</strong> : avoir déjà joué au moins 15 matchs de padel —
               histoire de pouvoir bien profiter du format !
             </p>
-            <div className="pt-4">
-              <Button size="lg" className="rounded-full px-10" asChild>
-                <a href={registrationMailto(next)}>
-                  {isScheduled(next) ? "S'inscrire au tournoi" : "Soyez tenu(e) informé(e)"}
-                </a>
-              </Button>
-            </div>
+            {isRegistrable(next) ? (
+              <div id="inscription" className="pt-6 scroll-mt-24">
+                <RegistrationForm event={next} />
+              </div>
+            ) : (
+              <div className="pt-4">
+                <Button size="lg" className="rounded-full px-10" asChild>
+                  <a href={registrationMailto(next)}>Soyez tenu(e) informé(e)</a>
+                </Button>
+              </div>
+            )}
           </div>
         </section>
       )}
@@ -158,7 +163,7 @@ function NextEventInvite({ event }: { event: PadelEvent }) {
           {timeFormatter.format(new Date(event.startDate))} à{" "}
           {timeFormatter.format(new Date(event.endDate))}
         </strong>{" "}
-        au Gastuche (Chau. de Wavre, 504, 1390 Grez-Doiceau) sur 7 terrains.
+        au <strong>{event.venue}</strong> (Chau. de Wavre, 504, 1390 Grez-Doiceau) sur 7 terrains.
       </p>
     );
   }
@@ -166,10 +171,14 @@ function NextEventInvite({ event }: { event: PadelEvent }) {
   return (
     <p>
       Nous préparons la {editionLabel} —{" "}
-      <strong>la date sera bientôt confirmée</strong>. Comme d'habitude, rendez-vous au Gastuche
-      (Chau. de Wavre, 504, 1390 Grez-Doiceau) sur 7 terrains, en soirée.
+      <strong>la date sera bientôt confirmée</strong>. Comme d'habitude, rendez-vous à Grez-Doiceau
+      sur 7 terrains, en soirée.
     </p>
   );
+}
+
+function isRegistrable(event: PadelEvent): boolean {
+  return isScheduled(event) && typeof event.capacity === "number" && event.capacity > 0;
 }
 
 function InfoCard({

@@ -102,9 +102,11 @@ function UpcomingRow({ event }: { event: PadelEvent }) {
         </div>
       </div>
       <Button className="rounded-full px-8" asChild>
-        <a href={registrationMailto(event)}>
-          {scheduled ? "S'inscrire" : "Soyez tenu(e) informé(e)"}
-        </a>
+        {scheduled && event.capacity ? (
+          <a href="/#inscription">S'inscrire</a>
+        ) : (
+          <a href={registrationMailto(event)}>Soyez tenu(e) informé(e)</a>
+        )}
       </Button>
     </li>
   );

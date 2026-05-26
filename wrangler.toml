@@ -1,0 +1,20 @@
+name = "padelsocialclub"
+compatibility_date = "2026-05-01"
+pages_build_output_dir = "dist"
+account_id = "a16ca00b38bc77d4163d3b362f5c8a50"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "padelsocialclub"
+database_id = "6de1c232-f7a9-4b07-9394-851303c137bc"
+migrations_dir = "migrations"
+
+[vars]
+# Default email "From:" address. Override per-environment in the Pages dashboard.
+RESEND_FROM = "Padel Social Club <noreply@padelsocialclub.be>"
+# Notification email — copies of registration mails go here.
+NOTIFY_EMAIL = "michael@i-management.be"
+
+# Secrets — set with `wrangler pages secret put <name>`:
+#   - RESEND_API_KEY    : API key from resend.com
+#   - ADMIN_PASSWORD    : password for /admin (sent as Basic auth)
