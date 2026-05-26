@@ -156,7 +156,7 @@ function CapacityBanner({ status }: { status: EventStatus }) {
     );
   }
   const remaining = status.capacity - status.confirmed;
-  if (remaining <= 5) {
+  if (remaining <= 10) {
     return (
       <div className="flex gap-3 rounded-md border border-secondary/50 bg-secondary/10 px-4 py-3 text-sm">
         <Info className="h-5 w-5 shrink-0 text-secondary mt-0.5" strokeWidth={1.75} />

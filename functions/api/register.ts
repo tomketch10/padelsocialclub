@@ -76,6 +76,8 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
       to: env.NOTIFY_EMAIL,
       subject: adminMail.subject,
       html: adminMail.html,
+      // So hitting "Reply" in Michael's inbox goes straight to the registrant.
+      replyTo: input.email,
     });
   } catch (err) {
     // Email failure shouldn't roll back the registration — log it and continue.
