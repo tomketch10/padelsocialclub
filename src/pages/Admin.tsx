@@ -114,6 +114,14 @@ export default function Admin() {
   }
 
   const byEvent = groupByEvent(registrations);
+  const sortedEntries = Object.entries(byEvent).sort(([slugA], [slugB]) => {
+    const eventA = eventsData.find((e) => e.slug === slugA);
+    const eventB = eventsData.find((e) => e.slug === slugB);
+    if (!eventA || !eventB) return 0;
+    const dateA = eventA.startDate ? new Date(eventA.startDate).getTime() : 0;
+    const dateB = eventB.startDate ? new Date(eventB.startDate).getTime() : 0;
+    return dateB - dateA; // Newest first
+  });
 
   return (
     <PageLayout>
@@ -134,7 +142,7 @@ export default function Admin() {
           <p className="text-foreground/70">Aucune inscription pour le moment.</p>
         )}
 
-        {Object.entries(byEvent).map(([slug, rows]) => {
+        {sortedEntries.map(([slug, rows]) => {
           const event = eventsData.find((e) => e.slug === slug);
           const confirmed = rows.filter((r) => r.status === "confirmed");
           const waitlist = rows.filter((r) => r.status === "waitlist");
