@@ -47,7 +47,7 @@ export function registrationMailto(event: PadelEvent): string {
 export const events: PadelEvent[] = [
   {
     slug: "le-padel-social-club-11",
-    title: "Prochain tournoi",
+    title: "Le Padel Social Club #11",
     startDate: "2026-09-30T19:00:00",
     endDate: "2026-09-30T22:00:00",
     cost: "40€",
