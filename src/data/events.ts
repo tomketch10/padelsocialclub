@@ -43,6 +43,7 @@ export function registrationMailto(event: PadelEvent): string {
   return `mailto:${REGISTRATION_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 
+// Tournament list — newest first
 export const events: PadelEvent[] = [
   {
     slug: "le-padel-social-club-11",
