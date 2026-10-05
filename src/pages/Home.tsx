@@ -21,6 +21,9 @@ export default function Home() {
   const nextDateLabel = next && isScheduled(next)
     ? dateFormatter.format(new Date(next.startDate)).toUpperCase()
     : "À CONFIRMER";
+  const nextTimeLabel = next && isScheduled(next)
+    ? `${formatHour(next.startDate)} à ${formatHour(next.endDate)}`
+    : "À confirmer";
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -128,7 +131,7 @@ export default function Home() {
               {nextDateLabel}
             </InfoCard>
             <InfoCard icon={<Clock className="h-12 w-12 text-secondary" strokeWidth={1.5} />} title="Heure">
-              18h30 à 21h30
+              {nextTimeLabel}
             </InfoCard>
             <InfoCard icon={<Tag className="h-12 w-12 text-secondary" strokeWidth={1.5} />} title="Prix">
               40€ / joueur pour 3h de padel
@@ -143,6 +146,12 @@ export default function Home() {
       <Footer />
     </div>
   );
+}
+
+function formatHour(isoDateTime: string): string {
+  const date = new Date(isoDateTime);
+  const minutes = date.getMinutes();
+  return minutes === 0 ? `${date.getHours()}h` : `${date.getHours()}h${String(minutes).padStart(2, "0")}`;
 }
 
 function NextEventInvite({ event }: { event: PadelEvent }) {
