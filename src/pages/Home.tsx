@@ -68,10 +68,12 @@ export default function Home() {
               individuel, dans une ambiance{" "}
               <strong>chaleureuse, fair-play et pleine d'énergie</strong>.
             </p>
-            <p>
-              Places limitées à <strong>{next.capacity ?? 30} participants</strong> — premiers
-              inscrits, premiers servis !
-            </p>
+            {next.capacity ? (
+              <p>
+                Places limitées à <strong>{next.capacity} participants</strong> — premiers
+                inscrits, premiers servis !
+              </p>
+            ) : null}
             <p>
               Compris dans le prix de <strong>{next.cost}</strong> : 3h de padel (24€), des balles
               neuves (2€), 2 boissons après le match (7€) et l'organisation.
