@@ -117,9 +117,9 @@ export default function Admin() {
   const sortedEntries = Object.entries(byEvent).sort(([slugA], [slugB]) => {
     const eventA = eventsData.find((e) => e.slug === slugA);
     const eventB = eventsData.find((e) => e.slug === slugB);
-    if (!eventA || !eventB) return 0;
-    const dateA = eventA.startDate ? new Date(eventA.startDate).getTime() : 0;
-    const dateB = eventB.startDate ? new Date(eventB.startDate).getTime() : 0;
+    // A slug no longer in the events list (the cancelled #12) sorts last.
+    const dateA = eventA?.startDate ? new Date(eventA.startDate).getTime() : 0;
+    const dateB = eventB?.startDate ? new Date(eventB.startDate).getTime() : 0;
     return dateB - dateA; // Newest first
   });
 
