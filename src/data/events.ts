@@ -46,10 +46,13 @@ export function registrationMailto(event: PadelEvent): string {
 // Tournament list — newest first
 export const events: PadelEvent[] = [
   {
-    slug: "le-padel-social-club-12",
-    title: "Le Padel Social Club #12",
+    slug: "le-padel-social-club-13",
+    title: "Le Padel Social Club #13",
+    startDate: "2026-12-02T19:00:00",
+    endDate: "2026-12-02T22:00:00",
     cost: "40€",
     venue: "Mokko",
+    capacity: 25,
   },
   {
     slug: "le-padel-social-club-11",
